@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BudgetMVC.Models;
+using BudgetMVC.Models.ViewModels;
 
 namespace BudgetMVC.Controllers
 {
@@ -21,27 +22,7 @@ namespace BudgetMVC.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-              return _context.Categories != null ? 
-                          View(await _context.Categories.ToListAsync()) :
-                          Problem("Entity set 'TransactionContext.Categories'  is null.");
-        }
-
-        // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Categories == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
+            return RedirectToAction("Index", "Transactions");
         }
 
         // GET: Categories/Create
@@ -55,8 +36,21 @@ namespace BudgetMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,Title")] Category category)
+        public async Task<IActionResult> Create(BudgetViewModel category)
         {
+            if(category.InsertCategory.CategoryId > 0)
+            {
+                var test = await _context.Categories.FindAsync(category.InsertCategory.CategoryId);
+                test.Title = category.InsertCategory.CategoryName;
+
+                if (ModelState.IsValid)
+                {
+                    _context.Update(test);
+                    await _context.SaveChangesAsync();
+                }
+                ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", test.CategoryId);
+                return RedirectToAction(nameof(Index));
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -64,6 +58,18 @@ namespace BudgetMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction("Index");
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public JsonResult IsUnique([Bind(Prefix = "InsertCategory.CategoryName")] string name)
+        {
+            var categories = _context.Categories;
+
+            if (categories.Any(x => x.Title == name))
+                return Json("Category already exists");
+
+            return Json(true);
+
         }
 
         // GET: Categories/Edit/5

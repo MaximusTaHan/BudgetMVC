@@ -12,14 +12,13 @@ namespace BudgetMVC.Models
         public string TransactionName { get; set; }
 
         [Required]
-        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Amount { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
-
-        public int CategoryID { get; set; }
+        [Required]
+        public int? CategoryID { get; set; }
         public Category? Category { get; set; }
     }
 }

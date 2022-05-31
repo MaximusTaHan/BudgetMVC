@@ -32,26 +32,9 @@ namespace BudgetMVC.Controllers
                 InsertTransaction = new InsertTransactionViewModel { Categories = categories }
             };
 
+            ModelState.Clear();
+
             return View(budgetViewModel);
-        }
-
-        // GET: Transactions/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
-
-            var transaction = await _context.Transactions
-                .Include(t => t.Category)
-                .FirstOrDefaultAsync(m => m.TransactionID == id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            return View(transaction);
         }
 
         // GET: Transactions/Create
@@ -66,15 +49,36 @@ namespace BudgetMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionID,TransactionName,Amount,CategoryID,Date")] Transaction transaction)
+        public async Task<IActionResult> Create(BudgetViewModel transaction)
         {
-            if (ModelState.IsValid)
+
+            Transaction newTransaction = new()
             {
-                _context.Add(transaction);
+                TransactionID = transaction.InsertTransaction.TransactionID,
+                TransactionName = transaction.InsertTransaction.TransactionName,
+                Amount = transaction.InsertTransaction.Amount,
+                CategoryID = transaction.InsertTransaction.CategoryID,
+                Date = transaction.InsertTransaction.Date,
+            };
+
+            if (newTransaction.TransactionID > 0)
+            {
+                if(ModelState.IsValid)
+                {
+                    _context.Update(newTransaction);
+                    await _context.SaveChangesAsync();
+                }
+                ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", newTransaction.CategoryID);
+                return RedirectToAction(nameof(Index));
+            }
+
+            else if (ModelState.IsValid)
+            {
+                _context.Add(newTransaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", transaction.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", newTransaction.CategoryID);
             return RedirectToAction("Index");
         }
 
@@ -92,7 +96,7 @@ namespace BudgetMVC.Controllers
                 return NotFound();
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", transaction.CategoryID);
-            return View(transaction);
+            return RedirectToAction("Index");
         }
 
         // POST: Transactions/Edit/5
@@ -100,36 +104,7 @@ namespace BudgetMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TransactionID,TransactionName,Amount,CategoryID,Date")] Transaction transaction)
-        {
-            if (id != transaction.TransactionID)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(transaction);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TransactionExists(transaction.TransactionID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", transaction.CategoryID);
-            return View(transaction);
-        }
 
         // GET: Transactions/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -148,28 +123,6 @@ namespace BudgetMVC.Controllers
             }
 
             return View(transaction);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> InsertCategory(BudgetViewModel model)
-        {
-            CategoriesController categoriesController = new(_context);
-            Category category = new Category();
-
-            if (model.InsertCategory.CategoryId > 0)
-            {
-                category.Title = model.InsertCategory.CategoryName;
-                category.CategoryId = model.InsertCategory.CategoryId;
-
-                categoriesController.Create(category);
-            }
-            else
-            {
-                category.Title = model.InsertCategory.CategoryName;
-                categoriesController.Create(category);
-            }
-
-            return RedirectToAction("Index");
         }
 
         // POST: Transactions/Delete/5
