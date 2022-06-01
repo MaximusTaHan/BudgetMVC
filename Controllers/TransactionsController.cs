@@ -20,21 +20,50 @@ namespace BudgetMVC.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(BudgetViewModel? model)
         {
-            var transactions = await _context.Transactions.ToListAsync();
+            var transactions = await FilterTransactions(model);
             var categories = await _context.Categories.ToListAsync();
 
             var budgetViewModel = new BudgetViewModel
             {
                 Transactions = transactions,
                 Categories = new CategoriesViewModel { Categories = categories },
-                InsertTransaction = new InsertTransactionViewModel { Categories = categories }
+                InsertTransaction = new InsertTransactionViewModel { Categories = categories },
+                FilterParameters = new FilterParametersViewModel { Categories = categories },
             };
 
             ModelState.Clear();
 
             return View(budgetViewModel);
+        }
+
+        private async Task<List<Transaction>> FilterTransactions(BudgetViewModel? model)
+        {
+            var transactions = await _context.Transactions.ToListAsync();
+            if (model.FilterParameters == null)
+            {
+
+            }
+
+            else if (model.FilterParameters.CategoryId != 0 && model.FilterParameters.StartDate == null)
+                transactions = transactions.Where(x => x.CategoryID == model.FilterParameters.CategoryId).ToList();
+
+            else if (model.FilterParameters.CategoryId == 0 && model.FilterParameters.StartDate != null)
+                transactions = transactions.Where(x => 
+                x.Date >= model.FilterParameters.StartDate
+                    &&
+                x.Date <= model.FilterParameters.EndDate).ToList();
+
+            else if(model.FilterParameters.CategoryId != 0 &&
+                model.FilterParameters.StartDate != null)
+                transactions = transactions
+                    .Where(x =>
+                    x.Date >= model.FilterParameters.StartDate &&
+                    x.Date <=
+                    model.FilterParameters.EndDate &&
+                    x.CategoryID == model.FilterParameters.CategoryId).ToList();
+            return transactions;
         }
 
         // GET: Transactions/Create

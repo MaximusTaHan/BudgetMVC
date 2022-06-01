@@ -1,9 +1,20 @@
 ﻿
 $("#openCategoryModalBtn").on("click", function () {
+    $('#insert-category-form').find('.text-danger').empty();
+    $('#insert-category-form #InsertCategory_CategoryId').val("");
+    $('#insert-category-form #InsertCategory_CategoryName').val("");
+
     $("#addCategoryModal").modal("show");
 });
 
 $("#openTransactionModalBtn").on("click", function () {
+    $('#insert-transaction-form').find('.text-danger').empty();
+    $('#insert-transaction-form #InsertTransaction_TransactionID').val(0);
+    $('#insert-transaction-form #InsertTransaction_TransactionName').val("");
+    $('#insert-transaction-form #InsertTransaction_Amount').val("");
+    $('#insert-transaction-form #InsertTransaction_Date').val("");
+    $('#insert-transaction-form #InsertTransaction_CategoryID').val("");
+
     $("#addTransactionModal").modal("show");
 });
 
