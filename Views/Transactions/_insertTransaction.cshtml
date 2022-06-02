@@ -5,31 +5,43 @@
         <form asp-action="Create" id="insert-transaction-form" method="post" class="form-horizontal" role="form">
             <input asp-for="InsertTransaction.TransactionID" type="hidden" class="form-control" />
 
-            <div class="row justify-content-center transaction-input">
+            <div class="row justify-content-center transaction-input input-fields">
                 <div class="form-floating col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <input type="Date" asp-for="InsertTransaction.Date" class="form-control" />
                     <label asp-for="InsertTransaction.Date" class="form-label"></label>
+                    
+                </div>
+            </div>
+            <div class="row justify-content-center form-errors">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <span id="transaction-validation" asp-validation-for="InsertTransaction.Date" class="text-danger"></span>
                 </div>
             </div>
-
-            <div class="row justify-content-center transaction-input">
+            <div class="row justify-content-center transaction-input input-fields">
                 <div class="form-floating col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <input asp-for="InsertTransaction.TransactionName" class="form-control" />
                     <label asp-for="InsertTransaction.TransactionName" class="form-label"></label>
+                    
+                </div>
+            </div>
+            <div class="row justify-content-center form-errors">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <span asp-validation-for="InsertTransaction.TransactionName" class="text-danger"></span>
                 </div>
             </div>
-
-            <div class="row justify-content-center transaction-input">
+            <div class="row justify-content-center transaction-input input-fields">
                 <div class="form-floating col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <input asp-for="InsertTransaction.Amount" class="form-control" />
                     <label asp-for="InsertTransaction.Amount" class="form-label"></label>
+                    
+                </div>
+            </div>
+            <div class="row justify-content-center form-errors">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <span asp-validation-for="InsertTransaction.Amount" class="text-danger"></span>
                 </div>
             </div>
-
-            <div class="row justify-content-center transaction-input">
+            <div class="row justify-content-center transaction-input input-fields">
                 <div class="form-floating col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <select asp-for="InsertTransaction.CategoryID" class="form-control">
                         <option></option>
@@ -39,10 +51,13 @@
                         }
                     </select>
                     <label asp-for="InsertTransaction.CategoryID" class="form-label"></label>
+                </div>
+            </div>
+            <div class="row justify-content-center form-errors">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-10">
                     <span asp-validation-for="InsertTransaction.CategoryID" class="text-danger"></span>
                 </div>
             </div>
-
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-10 mt-3 mb-5">
                     <button type="submit" id="addTransactionBtn" class="btn btn-success form-button">Add Transaction</button>

@@ -16,3 +16,15 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.form-errors {
+    font-size: 14px;
+}
+
+.input-fields {
+    margin-top: 3px;
+}
+
+.form-label {
+    margin-left: 0.9rem;
+}

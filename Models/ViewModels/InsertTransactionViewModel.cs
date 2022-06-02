@@ -12,9 +12,9 @@ namespace BudgetMVC.Models.ViewModels
         public string TransactionName { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(10)")]
-        public decimal Amount { get; set; }
+        public string Amount { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime Date { get; set; }
 
         [Required]

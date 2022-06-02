@@ -49,19 +49,20 @@ namespace BudgetMVC.Controllers
             else if (model.FilterParameters.CategoryId != 0 && model.FilterParameters.StartDate == null)
                 transactions = transactions.Where(x => x.CategoryID == model.FilterParameters.CategoryId).ToList();
 
-            else if (model.FilterParameters.CategoryId == 0 && model.FilterParameters.StartDate != null)
+            else if (model.FilterParameters.CategoryId == 0 && model.FilterParameters.StartDate != null && model.FilterParameters.EndDate == null)
                 transactions = transactions.Where(x => 
-                x.Date >= model.FilterParameters.StartDate
-                    &&
-                x.Date <= model.FilterParameters.EndDate).ToList();
+                x.Date >= model.FilterParameters.StartDate).ToList();
 
+            else if (model.FilterParameters.CategoryId == 0 && model.FilterParameters.StartDate != null && model.FilterParameters.EndDate != null)
+                transactions = transactions.Where(x =>
+                x.Date >= model.FilterParameters.StartDate
+                &&
+                x.Date <= model.FilterParameters.EndDate).ToList();
             else if(model.FilterParameters.CategoryId != 0 &&
                 model.FilterParameters.StartDate != null)
                 transactions = transactions
                     .Where(x =>
                     x.Date >= model.FilterParameters.StartDate &&
-                    x.Date <=
-                    model.FilterParameters.EndDate &&
                     x.CategoryID == model.FilterParameters.CategoryId).ToList();
             return transactions;
         }
@@ -85,7 +86,7 @@ namespace BudgetMVC.Controllers
             {
                 TransactionID = transaction.InsertTransaction.TransactionID,
                 TransactionName = transaction.InsertTransaction.TransactionName,
-                Amount = transaction.InsertTransaction.Amount,
+                Amount = decimal.Parse(transaction.InsertTransaction.Amount),
                 CategoryID = transaction.InsertTransaction.CategoryID,
                 Date = transaction.InsertTransaction.Date,
             };

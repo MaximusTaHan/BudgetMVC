@@ -17,6 +17,7 @@ namespace BudgetMVC.Models
         public decimal Amount { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime Date { get; set; }
         [Required]
         public int? CategoryID { get; set; }

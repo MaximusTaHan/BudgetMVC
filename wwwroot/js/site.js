@@ -57,6 +57,7 @@ $(".openUpdateTransactionModalBtn").on("click", function () {
     var date = $(this).closest('tr').find('td:eq(3)').html();
     var title = $(this).closest('tr').find('td:eq(4)').html();
 
+    $('#insert-transaction-form').find('.text-danger').empty();
     $('#insert-transaction-form #InsertTransaction_TransactionID').val($.trim(id));
     $('#insert-transaction-form #InsertTransaction_TransactionName').val($.trim(name));
     $('#insert-transaction-form #InsertTransaction_Amount').val($.trim(amount));
