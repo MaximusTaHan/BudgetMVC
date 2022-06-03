@@ -33,8 +33,6 @@ namespace BudgetMVC.Controllers
                 FilterParameters = new FilterParametersViewModel { Categories = categories },
             };
 
-            ModelState.Clear();
-
             return View(budgetViewModel);
         }
 
@@ -75,8 +73,6 @@ namespace BudgetMVC.Controllers
         }
 
         // POST: Transactions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BudgetViewModel transaction)
@@ -95,6 +91,7 @@ namespace BudgetMVC.Controllers
             {
                 if(ModelState.IsValid)
                 {
+
                     _context.Update(newTransaction);
                     await _context.SaveChangesAsync();
                 }
@@ -110,49 +107,6 @@ namespace BudgetMVC.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", newTransaction.CategoryID);
             return RedirectToAction("Index");
-        }
-
-        // GET: Transactions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
-
-            var transaction = await _context.Transactions.FindAsync(id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", transaction.CategoryID);
-            return RedirectToAction("Index");
-        }
-
-        // POST: Transactions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-
-        // GET: Transactions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
-
-            var transaction = await _context.Transactions
-                .Include(t => t.Category)
-                .FirstOrDefaultAsync(m => m.TransactionID == id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            return View(transaction);
         }
 
         // POST: Transactions/Delete/5

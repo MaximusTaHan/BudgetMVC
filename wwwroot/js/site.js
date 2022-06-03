@@ -1,7 +1,7 @@
 ﻿
 $("#openCategoryModalBtn").on("click", function () {
     $('#insert-category-form').find('.text-danger').empty();
-    $('#insert-category-form #InsertCategory_CategoryId').val("");
+    $('#insert-category-form #InsertCategory_CategoryId').val(0);
     $('#insert-category-form #InsertCategory_CategoryName').val("");
 
     $("#addCategoryModal").modal("show");

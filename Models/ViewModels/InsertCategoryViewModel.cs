@@ -10,6 +10,7 @@ namespace BudgetMVC.Models.ViewModels
 
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Category has to be atleast two characters long")]
         [Remote("IsUnique", "Categories")]
+        [Display(Name = "Category Name")]
         [Required]
         public string CategoryName { get; set; }
     }

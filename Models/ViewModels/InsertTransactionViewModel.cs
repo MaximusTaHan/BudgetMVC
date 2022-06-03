@@ -9,6 +9,7 @@ namespace BudgetMVC.Models.ViewModels
 
         [Required]
         [StringLength(100)]
+        [Display(Name = "Transaction Name")]
         public string TransactionName { get; set; }
 
         [Required]
