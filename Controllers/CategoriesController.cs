@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BudgetMVC.Models;
 using BudgetMVC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetMVC.Controllers
 {
+    
     public class CategoriesController : Controller
     {
         private readonly TransactionContext _context;

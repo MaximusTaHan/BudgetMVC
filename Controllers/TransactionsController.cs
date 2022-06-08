@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BudgetMVC.Models;
 using BudgetMVC.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetMVC.Controllers
 {
+
     public class TransactionsController : Controller
     {
         private readonly TransactionContext _context;
