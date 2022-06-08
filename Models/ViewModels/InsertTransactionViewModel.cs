@@ -13,6 +13,7 @@ namespace BudgetMVC.Models.ViewModels
         public string TransactionName { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d+\,\d{0,2}$")]
         public string Amount { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:d}")]
